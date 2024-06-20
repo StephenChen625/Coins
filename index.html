@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>概率问题：模拟扔硬币</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .input-container label {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+        .input-container input {
+            width: 60px;
+            padding: 5px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .input-container button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+        .coin-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+        .coin {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .coin:hover {
+            transform: scale(1.1);
+        }
+        .heads {
+            background-color: #4CAF50;
+        }
+        .tails {
+            background-color: #FFB6C1;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            position: relative;
+            height: 40px;
+        }
+        .stats div {
+            height: 100%;
+            border-radius: 5px;
+            margin: 0 5px;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            transition: width 0.3s;
+            position: absolute;
+            top: 0;
+        }
+        .heads-bar {
+            background-color: #4CAF50;
+            left: 0;
+        }
+        .tails-bar {
+            background-color: #FFB6C1;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>概率问题：模拟扔硬币</h1>
+    <div class="input-container">
+        <label for="num-coins">输入扔硬币的数量（最多10枚）：</label>
+        <input type="number" id="num-coins" name="num-coins" min="1" max="10" value="1">
+        <button onclick="simulate()">模拟</button>
+    </div>
+    <div class="coin-container" id="coin-container"></div>
+    <div class="stats">
+        <div class="heads-bar" id="heads-bar" style="width: 0%;">正面向上：0</div>
+        <div class="tails-bar" id="tails-bar" style="width: 0%;">反面向上：0</div>
+    </div>
+
+    <script>
+        function simulate() {
+            const numCoins = document.getElementById('num-coins').value;
+            const coinContainer = document.getElementById('coin-container');
+            const headsBar = document.getElementById('heads-bar');
+            const tailsBar = document.getElementById('tails-bar');
+
+            let heads = 0;
+            let tails = 0;
+
+            coinContainer.innerHTML = ''; // 清空之前的结果
+            headsBar.style.width = '0%';
+            tailsBar.style.width = '0%';
+            headsBar.textContent = '正面向上：0';
+            tailsBar.textContent = '反面向上：0';
+
+            for (let i = 0; i < numCoins; i++) {
+                setTimeout(() => {
+                    const coin = document.createElement('div');
+                    const result = Math.random() < 0.5 ? 'heads' : 'tails';
+                    coin.className = `coin ${result}`;
+                    coin.textContent = result === 'heads' ? '1' : '🌸';
+                    coinContainer.appendChild(coin);
+
+                    if (result === 'heads') {
+                        heads++;
+                    } else {
+                        tails++;
+                    }
+
+                    const headsPercentage = (heads / numCoins) * 100;
+                    const tailsPercentage = (tails / numCoins) * 100;
+                    headsBar.style.width = `${headsPercentage}%`;
+                    tailsBar.style.width = `${tailsPercentage}%`;
+                    headsBar.textContent = `正面向上：${heads}`;
+                    tailsBar.textContent = `反面向上：${tails}`;
+                }, i * 500); // 逐个显示硬币结果，每个间隔500毫秒
+            }
+        }
+    </script>
+</body>
+</html>
